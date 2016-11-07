@@ -4,7 +4,7 @@
   "description": "Mocha's spec reporter with retry stats and percentages.",
   "main": "extra-spec.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers coffee:coffee-script/register"
   },
   "repository": {
     "type": "git",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/rweda/mocha-extra-spec#readme",
   "devDependencies": {
+    "bluebird": "^3.4.6",
     "chai": "^3.5.0",
     "child-process-promise": "^2.2.0",
     "coffee-script": "^1.11.1"
