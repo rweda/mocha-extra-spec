@@ -9,6 +9,9 @@ mocha = (opts) ->
     .catch (err) ->
       err
 
+regex =
+  testsPassed: /\n ((?:⚠\s)|✓|✖) ([0-9\.]+)\% of tests passed/
+
 describe "ExtraSpec with a basic example", ->
 
   extra = mocha "--reporter #{__dirname}/../dist/ExtraSpec #{__dirname}/files/test-standard.coffee"
@@ -17,17 +20,24 @@ describe "ExtraSpec with a basic example", ->
   output = Promise
     .join extra, spec
     .map (res) ->
-      res.stdout = res.stdout
+      res.safeStdout = res.stdout
         .replace(/([0-9]+)ms/, "xms") # Replace '20ms' with 'xms' to standardize across runs
-        .replace(/\n ⚠  66\.67\% of tests passed/, '') # Remove extra output
+        .replace(regex.testsPassed, '') # Remove extra output
       res
 
-  it "should match Spec's stdout (with extra content)", ->
+  it "should mostly match Spec's stdout", ->
     output
       .then ([extra, spec]) ->
-        extra.stdout.should.equal spec.stdout
+        extra.safeStdout.should.equal spec.safeStdout
 
   it "should match Spec's stderr", ->
     output
       .then ([extra, spec]) ->
         extra.stderr.should.equal spec.stderr
+
+  it "should include percentage of passing tests", ->
+    extra.then (res) ->
+      res.stdout.should.match regex.testsPassed
+      [symbol, number] = res.stdout.match(regex.testsPassed).slice 1
+      symbol.should.equal "⚠ "
+      number.should.equal "66.67"
