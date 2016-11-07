@@ -1,2 +1,2 @@
-# mocha-extra-spec
-Mocha's spec reporter with retry stats and percentages
+# Mocha ExtraSpec
+Mocha's spec reporter with retry stats and percentages.

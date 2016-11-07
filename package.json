@@ -1,0 +1,27 @@
+{
+  "name": "extra-spec",
+  "version": "0.0.0",
+  "description": "Mocha's spec reporter with retry stats and percentages.",
+  "main": "extra-spec.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rweda/mocha-extra-spec.git"
+  },
+  "author": "Ryan Leonard (http://ryanleonard.us)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rweda/mocha-extra-spec/issues"
+  },
+  "homepage": "https://github.com/rweda/mocha-extra-spec#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "child-process-promise": "^2.2.0",
+    "coffee-script": "^1.11.1"
+  },
+  "dependencies": {
+    "mocha": "^3.1.2"
+  }
+}
