@@ -12,11 +12,47 @@
 
   symbols = Base.symbols, color = Base.color;
 
-  symbols.warning = "⚠";
+  symbols.bang = "⚠ ";
 
   if (process.platform === 'win32') {
-    symbols.warning = "!";
+    symbols.bang = "!";
   }
+
+
+  /*
+  Determine the message color based on a percent.  1 is the best, 0 is the worst.
+   */
+
+  color.byPercent = function(percent) {
+    switch (false) {
+      case percent !== 1:
+        return "bright pass";
+      case !(percent > 0.9):
+        return "pass";
+      case !(percent > 0.6):
+        return "medium";
+      case !(percent > 0.3):
+        return "bright yellow";
+      default:
+        return "fail";
+    }
+  };
+
+
+  /*
+  Determine the message symbol based on a percent.  1 is the best, 0 is the worst.
+   */
+
+  symbols.byPercent = function(percent) {
+    switch (false) {
+      case percent !== 1:
+        return symbols.ok;
+      case !(percent > 0.5):
+        return symbols.bang;
+      default:
+        return symbols.err;
+    }
+  };
 
   ExtraSpec = (function(superClass) {
     extend(ExtraSpec, superClass);
@@ -24,6 +60,42 @@
     function ExtraSpec() {
       return ExtraSpec.__super__.constructor.apply(this, arguments);
     }
+
+
+    /*
+    Print out a percentage, with a symbol and custom message.
+    @param {Number} percent the percent to print, 0-1
+    @param {Boolean} flip **Optional** if `false` (default), uses good symbols for 1, and bad symbols for 0.
+      Provide `true` to make 0 good, and 1 bad.
+    @param {String} msg a message to print after the percentage.  '%s' will be substituted with the percent.
+     */
+
+    ExtraSpec.prototype.printPercent = function(percent, flip, msg) {
+      var c, p, ref, symbol;
+      if (flip == null) {
+        flip = false;
+      }
+      if (typeof flip === "string") {
+        ref = [flip, false], msg = ref[0], flip = ref[1];
+      }
+      p = percent * (flip ? -1 : 1);
+      c = color.byPercent(p);
+      symbol = symbols.byPercent(p);
+      percent = (percent * 100).toFixed(2);
+      return console.log(color(c, " " + symbol + " " + msg), percent);
+    };
+
+
+    /*
+    Print out the percent of tests that passed.
+     */
+
+    ExtraSpec.prototype.printFailurePercent = function() {
+      var passes, total;
+      total = this.stats.tests;
+      passes = this.stats.passes;
+      return this.printPercent(passes / total, "%s% of tests passed");
+    };
 
 
     /*
@@ -41,6 +113,7 @@
         Base.list(this.failures);
         console.log();
       }
+      this.printFailurePercent();
       return console.log();
     };
 
