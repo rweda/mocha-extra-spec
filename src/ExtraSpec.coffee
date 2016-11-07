@@ -1,7 +1,9 @@
 ms = require "mocha/lib/ms"
 Spec = require "mocha/lib/reporters/spec.js"
 Base = require "mocha/lib/reporters/base.js"
-{symbols, color} = Base
+{symbols, color, colors} = Base
+
+colors.retry = 35
 
 symbols.bang = "⚠ "
 if process.platform is 'win32'
@@ -28,6 +30,28 @@ symbols.byPercent = (percent) ->
     else symbols.err
 
 class ExtraSpec extends Spec
+
+  constructor: (runner) ->
+    @indents = 0
+    super runner
+    runner.on 'suite', =>
+      ++@indents
+    runner.on 'suite end', =>
+      --@indents
+    runner.on 'pass', @addRetry
+    runner.on 'fail', @addRetry
+
+  indent: ->
+    Array(@indents).join '  '
+
+  ###
+  When a test passes or fails, add the number of retries to the stats.
+  ###
+  addRetry: (test) =>
+    @stats.retries ?= 0
+    @stats.retries += test.currentRetry()
+    if test.currentRetry() > 0
+      console.log @indent() + color("retry", "  #{symbols.bang}") + " Retried #{test.currentRetry()} times"
 
   ###
   Print out a percentage, with a symbol and custom message.
