@@ -9,6 +9,9 @@ if process.platform is 'win32'
 
 class ExtraSpec extends Spec
 
+  ###
+  Prints out statistics about the testing, and prints the error log.  Called after all tests have finished.
+  ###
   epilogue: ->
     console.log()
 

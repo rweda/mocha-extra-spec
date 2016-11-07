@@ -25,6 +25,11 @@
       return ExtraSpec.__super__.constructor.apply(this, arguments);
     }
 
+
+    /*
+    Prints out statistics about the testing, and prints the error log.  Called after all tests have finished.
+     */
+
     ExtraSpec.prototype.epilogue = function() {
       console.log();
       console.log("" + (color('bright pass', ' ')) + (color('green', ' %d passing')) + (color('light', ' (%s)')), this.stats.passes || 0, ms(this.stats.duration));
