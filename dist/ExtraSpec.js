@@ -118,7 +118,7 @@
       p = percent * (flip ? -1 : 1);
       c = color.byPercent(p);
       symbol = symbols.byPercent(p);
-      percent = (percent * 100).toFixed(2);
+      percent = Math.min(100, (percent * 100).toFixed(2));
       return console.log(color(c, " " + symbol + " " + msg), percent);
     };
 
@@ -132,6 +132,18 @@
       total = this.stats.tests;
       passes = this.stats.passes;
       return this.printPercent(passes / total, "%s% of tests passed");
+    };
+
+
+    /*
+    Print out the percent of tests that passed, including the number of retried tests in the count.
+     */
+
+    ExtraSpec.prototype.printTestPercent = function() {
+      var passes, total;
+      total = this.stats.retries + this.stats.tests;
+      passes = this.stats.passes;
+      return this.printPercent(passes / total, "%s% of attempts passed");
     };
 
 
@@ -151,6 +163,7 @@
         console.log();
       }
       this.printFailurePercent();
+      this.printTestPercent();
       return console.log();
     };
 

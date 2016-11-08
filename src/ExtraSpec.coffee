@@ -66,7 +66,7 @@ class ExtraSpec extends Spec
     p = percent * (if flip then -1 else 1)
     c = color.byPercent p
     symbol = symbols.byPercent p
-    percent = (percent * 100).toFixed 2
+    percent = Math.min 100, (percent * 100).toFixed 2
     console.log color(c, " #{symbol} #{msg}"), percent
 
   ###
@@ -76,6 +76,14 @@ class ExtraSpec extends Spec
     total = @stats.tests
     passes = @stats.passes
     @printPercent passes / total, "%s% of tests passed"
+
+  ###
+  Print out the percent of tests that passed, including the number of retried tests in the count.
+  ###
+  printTestPercent: ->
+    total = @stats.retries + @stats.tests
+    passes = @stats.passes
+    @printPercent passes / total, "%s% of attempts passed"
 
   ###
   Prints out statistics about the testing, and prints the error log.  Called after all tests have finished.
@@ -95,6 +103,8 @@ class ExtraSpec extends Spec
       console.log()
 
     @printFailurePercent()
+
+    @printTestPercent()
 
     console.log()
 

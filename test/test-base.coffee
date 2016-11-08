@@ -11,6 +11,7 @@ mocha = (opts) ->
 
 regex =
   testsPassed: /\n ((?:⚠\s)|✓|✖) ([0-9\.]+)\% of tests passed/
+  attemptsPassed: /\n ((?:⚠\s)|✓|✖) ([0-9\.]+)\% of attempts passed/
 
 describe "ExtraSpec with a basic example", ->
 
@@ -23,6 +24,7 @@ describe "ExtraSpec with a basic example", ->
       res.safeStdout = res.stdout
         .replace(/([0-9]+)ms/, "xms") # Replace '20ms' with 'xms' to standardize across runs
         .replace(regex.testsPassed, '') # Remove extra output
+        .replace(regex.attemptsPassed, '')
       res
 
   it "should mostly match Spec's stdout", ->
