@@ -1,6 +1,6 @@
 {
   "name": "extra-spec",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Mocha's spec reporter with retry stats and percentages.",
   "main": "extra-spec.js",
   "scripts": {
