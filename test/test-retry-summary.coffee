@@ -12,8 +12,11 @@ regex =
   summary: /\n ((?:⚠\s)|✓|✖) ([0-9\.]+)\% of attempts passed/
 
 describe "Inline Retry Display", ->
-  run = mocha "#{__dirname}/files/test-retry.coffee"
-  [symbol, percent] = []
+
+  [run, symbol, percent] = []
+
+  it "should get output from Mocha", ->
+    run = mocha "#{__dirname}/files/test-retry.coffee"
 
   it "should summarize the retries", ->
     run

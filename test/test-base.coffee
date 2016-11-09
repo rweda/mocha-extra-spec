@@ -15,17 +15,19 @@ regex =
 
 describe "ExtraSpec with a basic example", ->
 
-  extra = mocha "--reporter #{__dirname}/../dist/ExtraSpec #{__dirname}/files/test-standard.coffee"
-  spec = mocha "--reporter spec #{__dirname}/files/test-standard.coffee"
+  [extra, spec, output] = []
 
-  output = Promise
-    .join extra, spec
-    .map (res) ->
-      res.safeStdout = res.stdout
-        .replace(/([0-9]+)ms/, "xms") # Replace '20ms' with 'xms' to standardize across runs
-        .replace(regex.testsPassed, '') # Remove extra output
-        .replace(regex.attemptsPassed, '')
-      res
+  it "should get output from Mocha", ->
+    extra = mocha "--reporter #{__dirname}/../dist/ExtraSpec #{__dirname}/files/test-standard.coffee"
+    spec = mocha "--reporter spec #{__dirname}/files/test-standard.coffee"
+    output = Promise
+      .join extra, spec
+      .map (res) ->
+        res.safeStdout = res.stdout
+          .replace(/([0-9]+)ms/, "xms") # Replace '20ms' with 'xms' to standardize across runs
+          .replace(regex.testsPassed, '') # Remove extra output
+          .replace(regex.attemptsPassed, '')
+        res
 
   it "should mostly match Spec's stdout", ->
     output

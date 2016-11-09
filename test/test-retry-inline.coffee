@@ -9,7 +9,11 @@ mocha = (opts) ->
       err
 
 describe "Inline Retry Display", ->
-  run = mocha "#{__dirname}/files/test-retry.coffee"
+
+  run = null
+
+  it "should get output from Mocha", ->
+    run = mocha "#{__dirname}/files/test-retry.coffee"
 
   it "should show 1 retry", ->
     run
