@@ -2,7 +2,7 @@
   "name": "extra-spec",
   "version": "1.0.0",
   "description": "Mocha's spec reporter with retry stats and percentages.",
-  "main": "extra-spec.js",
+  "main": "dist/ExtraSpec.js",
   "scripts": {
     "test": "mocha --compilers coffee:coffee-script/register"
   },
